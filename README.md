@@ -133,3 +133,20 @@ python3 main.py --file example1.log --report average --date 2025-06-22
 |  4 | /api/challenges/...      |       1 |               0.056 |
 ```
 
+Запуск с пропущенным параметром файла:
+```
+python3 main.py --report average
+```
+Вывод:
+```
+Please, add at least one file with --file.
+```
+Запуск с несуществующим файлом:
+```
+python3 main.py --file nosuchafile.log --report average
+```
+Вывод:
+```
+Error: File 'nosuchafile.log' not found.
+No data to display for your request.
+```
