@@ -10,6 +10,7 @@ def register_report_type(name):
     """
     decorator factory to register a report function under a given name.
     @param name (str): the key under which the decorated function will be registered.
+    @return: a decorator that resgisters function in REPORTS
     """
     def decorator(func):
         REPORTS[name] = func
@@ -21,6 +22,7 @@ def average_display(report_dict):
     """
     generates a formatted table to display the report data for `average`.
     @param report_dict (dict): dictionary mapping endpoint to a list of assosiated values
+    @returns: the formatted table OR "no data" string
     """
     if not report_dict:
         return "No data to display for your request."
@@ -66,6 +68,7 @@ def average_report(files, date):
     processing a list of files and generating report.
     @param files (list of str): paths to the log files to process
     @param date (str or None): optionale filter by date string 
+    @returns: formatted output
     """
     report_dict = {}
     for file_path in files:
@@ -84,6 +87,7 @@ def validate_date(date_str):
     """
     validates that the date string is in the correct format.
     @param date_str (str): string to validate
+    @returns: true == validated / false == not good 
     """
     try:
         datetime.strptime(date_str, "%Y-%m-%d")
@@ -99,6 +103,7 @@ def process_everything(args):
         - file (list of str): file paths
         - report (list of str): resuested report type
         - data (str or None): date filter (optional)
+    @returns: might raise an error
     """
     if not args.file:
         raise ValueError("Please, add at least one file with --file.")
