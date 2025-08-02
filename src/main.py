@@ -7,6 +7,10 @@ from datetime import datetime
 REPORTS = {}
 
 def register_report_type(name):
+    """
+    decorator factory to register a report function under a given name.
+    @param name (str): the key under which the decorated function will be registered.
+    """
     def decorator(func):
         REPORTS[name] = func
         return func
@@ -14,6 +18,10 @@ def register_report_type(name):
 
 
 def average_display(report_dict):
+    """
+    generates a formatted table to display the report data for `average`.
+    @param report_dict (dict): dictionary mapping endpoint to a list of assosiated values
+    """
     if not report_dict:
         return "No data to display for your request."
 
@@ -31,6 +39,12 @@ def average_display(report_dict):
 
 
 def average_process_file(f, report_dict, date):
+    """
+    processing the file line-by-line, creates statistics by endpoint filtered by date
+    @param f (file): opened for reading file
+    @param report_dict (dict): dictionary to store data
+    @param date (str or None): date string to filter lines
+    """
     for line in f:
         data = json.loads(line)
         timestamp = data.get('@timestamp')
@@ -48,6 +62,11 @@ def average_process_file(f, report_dict, date):
 
 @register_report_type('average')
 def average_report(files, date):
+    """
+    processing a list of files and generating report.
+    @param files (list of str): paths to the log files to process
+    @param date (str or None): optionale filter by date string 
+    """
     report_dict = {}
     for file_path in files:
         try:
@@ -62,6 +81,10 @@ def average_report(files, date):
 
 
 def validate_date(date_str):
+    """
+    validates that the date string is in the correct format.
+    @param date_str (str): string to validate
+    """
     try:
         datetime.strptime(date_str, "%Y-%m-%d")
         return True
@@ -70,6 +93,13 @@ def validate_date(date_str):
 
 
 def process_everything(args):
+    """
+    validates CL arguments, generates the requested report
+    @param args (argparse.Namespace): parsed CL arguments, with atributes:
+        - file (list of str): file paths
+        - report (list of str): resuested report type
+        - data (str or None): date filter (optional)
+    """
     if not args.file:
         raise ValueError("Please, add at least one file with --file.")
     if not args.report:

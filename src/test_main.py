@@ -90,6 +90,7 @@ def test_process_everything_invalid_date():
 #   1. good data +
 #   2. no data +
 #   3. filtered +
+#   4. no filter +
 
 def test_average_display_with_data():
     report_dict = {"/api/home": [2, 0.3], "/api/about": [1, 0.3],}
@@ -105,10 +106,8 @@ def test_average_process_file_date_filter():
     fake_file = io.StringIO("".join(LOG_LINES))
     report_dict = {}
     average_process_file(fake_file, report_dict, date="2025-06-22")
-    # only entries with date 2025-06-22
     assert "/api/home" in report_dict
     assert "/api/about" not in report_dict
-    # сheck count and sum
     assert report_dict["/api/home"][0] == 2
     assert abs(report_dict["/api/home"][1] - 0.3) < 1e-6
 
